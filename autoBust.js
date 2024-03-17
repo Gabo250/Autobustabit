@@ -2,7 +2,8 @@ var config = {
   wait: { value: '', type: 'multiplier', label: 'Waiting between 2 bets until its under this multiplier' },
   multiplier: { value: '', type: 'multiplier', label: 'Multiplier' },
   betAmount: { value: '', type: 'balance', label: 'Bet amount' },
-  gameWait: { value: '', type: 'number', label: 'Waiting games without bet' }
+  gameWait: { value: '', type: 'number', label: 'Waiting games without bet' },
+  maxBet: { value: '', type: 'balance', label: 'Max Bet' };
 };
 
 let bit = config.betAmount.value;
@@ -10,7 +11,7 @@ let gamesWaiting = config.gameWait.value;
 let multiplier = config.multiplier.value;
 let wait = false;
 let actGameWait = 0;
-const MAX_BET = 729;
+const MAX_BET = config.maxBet / 100;
 let loseCounter = 0;
 let isBetting = false;
 let afresh = true;
