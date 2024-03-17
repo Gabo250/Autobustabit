@@ -71,6 +71,7 @@ engine.on('GAME_ENDED', () => {
       log('WIN!');
       gameActions = 0;
       multiplier = config.multiplier.value;
+      loseCounter = 0;
       bit = config.betAmount.value;
       afresh = true;
     }
