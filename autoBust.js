@@ -40,7 +40,7 @@ engine.on('GAME_STARTING', () => {
   else if (!afresh) {
     engine.bet(bit, multiplier);
     isBetting = true;
-    log(`Betting ${ bit } bit with ${ multiplier } multplier.`);
+    log(`Betting ${ bit / 100 } bit with ${ multiplier } multplier.`);
     gameActions++;
   }
 });
