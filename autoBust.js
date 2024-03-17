@@ -3,7 +3,7 @@ var config = {
   multiplier: { value: '', type: 'multiplier', label: 'Multiplier' },
   betAmount: { value: '', type: 'balance', label: 'Bet amount' },
   gameWait: { value: '', type: 'number', label: 'Waiting games without bet' },
-  maxBet: { value: '', type: 'balance', label: 'Max Bet' };
+  maxBet: { value: '', type: 'balance', label: 'Max Bet' }
 };
 
 let bit = config.betAmount.value;
