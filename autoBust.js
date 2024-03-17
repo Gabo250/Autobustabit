@@ -5,7 +5,7 @@ var config = {
   gameWait: { value: '', type: 'number', label: 'Waiting games without bet' }
 };
 
-let bit = config.betAmount.value / 100;
+let bit = config.betAmount.value;
 let gamesWaiting = config.gameWait.value;
 let multiplier = config.multiplier.value;
 let wait = false;
@@ -31,7 +31,7 @@ engine.on('GAME_STARTING', () => {
 
   if (afresh && isLastTwoRedStreakUnderMultiplier(config.wait.value)) {
     log('Last 2 game are under the given multiplier.');
-    log(`Betting ${ bit } bit with ${ multiplier } multplier.`);
+    log(`Betting ${ bit / 100 } bit with ${ multiplier } multplier.`);
     engine.bet(bit, multiplier);
     isBetting = true;
     afresh = false;
