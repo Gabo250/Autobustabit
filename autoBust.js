@@ -71,6 +71,6 @@ engine.on('GAME_ENDED', () => {
 
 function isLastTwoRedStreakUnderMultiplier(multiplier) {
   let gamesArray = engine.history.toArray();
-  log(gamesArray[0].bust + ' ' + gamesArray[1].bust);
+  log('Last game bust: ' + gamesArray[0].bust + ', Penult bust: ' + gamesArray[1].bust);
   return gamesArray[0].bust < multiplier && gamesArray[1].bust < multiplier;
 }
