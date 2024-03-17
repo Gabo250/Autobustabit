@@ -10,8 +10,8 @@ let gamesWaiting = config.gameWait.value;
 let multiplier = config.multiplier.value;
 let wait = false;
 let actGameWait = 0;
+const MAX_BET = 729;
 let loseCounter = 0;
-let gameActions = 0;
 let isBetting = false;
 let afresh = true;
 
@@ -35,13 +35,11 @@ engine.on('GAME_STARTING', () => {
     engine.bet(bit, multiplier);
     isBetting = true;
     afresh = false;
-    gameActions++;
   }
   else if (!afresh) {
     engine.bet(bit, multiplier);
     isBetting = true;
     log(`Betting ${ bit / 100 } bit with ${ multiplier } multplier.`);
-    gameActions++;
   }
 });
 
@@ -50,7 +48,7 @@ engine.on('GAME_ENDED', () => {
   if (isBetting) {
     if (!gameInfos.cashedAt) {
       log('LOSE!');      
-      if (gameActions === 15) {
+      if (bit / 100 === MAX_BET) {
         initialize();
         return;
       }
