@@ -49,7 +49,8 @@ engine.on('GAME_ENDED', () => {
   if (isBetting) {
     if (!gameInfos.cashedAt) {
       log('LOSE!');      
-      if (bit / 100 >= MAX_BET) {
+      if ((bit / 100) >= MAX_BET) {
+        log('init...');
         initialize();
         return;
       }
@@ -72,7 +73,6 @@ engine.on('GAME_ENDED', () => {
 });
 
 function initialize() {
-  gameActions = 0;
   multiplier = config.multiplier.value;
   loseCounter = 0;
   bit = config.betAmount.value;
