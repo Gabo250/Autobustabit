@@ -19,7 +19,7 @@ engine.on('GAME_STARTING', () => {
   log('NEW GAME');
   if (wait) {    
     actGameWait++;
-    log(actGameWait + ' game(s) get waited');
+    log('Waited ' + actGameWait + ' game(s)');
     if (actGameWait === gamesWaiting) {
       wait = false;
     }
