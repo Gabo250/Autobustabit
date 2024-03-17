@@ -51,13 +51,14 @@ engine.on('GAME_ENDED', () => {
       afresh = true;
     }
     else {
-      log('LOSE!');
-      loseCounter++;
+      log('LOSE!');      
       if (gameActions === 21) {
         afresh = true;
-        gameActions = 0
+        gameActions = 0;
+        return;
       }
-
+      
+      loseCounter++;
       if (loseCounter === 2) {
         wait = true;
         loseCounter = 0;
