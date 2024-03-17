@@ -56,6 +56,7 @@ engine.on('GAME_ENDED', () => {
       log('LOSE!');      
       if (gameActions === 15) {
         afresh = true;
+        isBetting = false
         gameActions = 0;
         multiplier = config.multiplier.value;
         bit = config.betAmount.value / 100;
