@@ -22,6 +22,7 @@ engine.on('GAME_STARTING', () => {
     log('Waited ' + actGameWait + ' game(s)');
     if (actGameWait === gamesWaiting) {
       wait = false;
+      actGameWait = 0;
       bit *= 3;
     }
 
