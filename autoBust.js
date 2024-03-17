@@ -55,7 +55,7 @@ engine.on('GAME_ENDED', () => {
         isBetting = false
         gameActions = 0;
         multiplier = config.multiplier.value;
-        bit = config.betAmount.value / 100;
+        bit = config.betAmount.value;
         return;
       }
       
@@ -71,7 +71,7 @@ engine.on('GAME_ENDED', () => {
       log('WIN!');
       gameActions = 0;
       multiplier = config.multiplier.value;
-      bit = config.betAmount.value / 100;
+      bit = config.betAmount.value;
       afresh = true;
     }
 
