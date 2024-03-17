@@ -5,7 +5,7 @@ var config = {
   gameWait: { value: '', type: 'number', label: 'Waiting games without bet' }
 };
 
-let satoshis = Math.round(config.betAmount.value * 100);
+let bit = config.betAmount.value / 100;
 let gamesWaiting = config.gameWait.value;
 let multiplier = config.multiplier.value;
 let wait = false;
@@ -22,6 +22,7 @@ engine.on('GAME_STARTING', () => {
     log('Waited ' + actGameWait + ' game(s)');
     if (actGameWait === gamesWaiting) {
       wait = false;
+      bit *= 3;
     }
 
     return;
@@ -29,16 +30,16 @@ engine.on('GAME_STARTING', () => {
 
   if (afresh && isLastTwoRedStreakUnderMultiplier(config.wait.value)) {
     log('Last 2 game are under the given multiplier.');
-    log("Betting...");
-    engine.bet(satoshis, multiplier);
+    log(`Betting ${ bit } bit with ${ multiplier } multplier.`);
+    engine.bet(bit, multiplier);
     isBetting = true;
     afresh = false;
     gameActions++;
   }
   else if (!afresh) {
-    engine.bet(satoshis, multiplier);
+    engine.bet(bit, multiplier);
     isBetting = true;
-    log("Betting...");
+    log(`Betting ${ bit } bit with ${ multiplier } multplier.`);
     gameActions++;
   }
 });
@@ -52,16 +53,20 @@ engine.on('GAME_ENDED', () => {
     }
     else {
       log('LOSE!');      
-      if (gameActions === 21) {
+      if (gameActions === 15) {
         afresh = true;
         gameActions = 0;
+        multiplier = config.multiplier.value;
+        bit = config.betAmount.value / 100;
         return;
       }
       
       loseCounter++;
+      multiplier++;
       if (loseCounter === 2) {
         wait = true;
         loseCounter = 0;
+        multiplier = config.multiplier.value;
       }      
     }
 
