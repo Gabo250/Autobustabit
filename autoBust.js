@@ -51,11 +51,7 @@ engine.on('GAME_ENDED', () => {
     if (!gameInfos.cashedAt) {
       log('LOSE!');      
       if (gameActions === 15) {
-        afresh = true;
-        isBetting = false
-        gameActions = 0;
-        multiplier = config.multiplier.value;
-        bit = config.betAmount.value;
+        initialize();
         return;
       }
       
@@ -69,16 +65,20 @@ engine.on('GAME_ENDED', () => {
     }
     else {
       log('WIN!');
-      gameActions = 0;
-      multiplier = config.multiplier.value;
-      loseCounter = 0;
-      bit = config.betAmount.value;
-      afresh = true;
+      initialize();
     }
 
     isBetting = false;
   }
 });
+
+function initialize() {
+  gameActions = 0;
+  multiplier = config.multiplier.value;
+  loseCounter = 0;
+  bit = config.betAmount.value;
+  afresh = true;
+}
 
 function isLastTwoRedStreakUnderMultiplier(multiplier) {
   let gamesArray = engine.history.toArray();
