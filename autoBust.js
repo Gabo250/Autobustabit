@@ -48,11 +48,7 @@ engine.on('GAME_STARTING', () => {
 engine.on('GAME_ENDED', () => {
   let gameInfos = engine.history.first();
   if (isBetting) {
-    if (gameInfos.cashedAt) {
-      log('WIN!');
-      afresh = true;
-    }
-    else {
+    if (!gameInfos.cashedAt) {
       log('LOSE!');      
       if (gameActions === 15) {
         afresh = true;
@@ -69,7 +65,14 @@ engine.on('GAME_ENDED', () => {
         wait = true;
         loseCounter = 0;
         multiplier = config.multiplier.value;
-      }      
+      } 
+    }
+    else {
+      log('WIN!');
+      gameActions = 0;
+      multiplier = config.multiplier.value;
+      bit = config.betAmount.value / 100;
+      afresh = true;
     }
 
     isBetting = false;
