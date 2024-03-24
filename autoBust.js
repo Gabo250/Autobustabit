@@ -77,6 +77,7 @@ function initialize() {
   loseCounter = 0;
   bit = config.betAmount.value;
   afresh = true;
+  isBetting = false;
 }
 
 function isLastTwoRedStreakUnderMultiplier(multiplier) {
