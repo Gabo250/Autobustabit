@@ -50,7 +50,7 @@ engine.on('GAME_ENDED', () => {
     if (!gameInfos.cashedAt) {
       log('LOSE!');      
       if ((bit / 100) >= MAX_BET) {
-        log('init...');
+        log('Max bet is reached. Initialize...');
         initialize();
         return;
       }
