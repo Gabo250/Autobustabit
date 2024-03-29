@@ -1,47 +1,48 @@
 var config = {
-  wait: { value: '', type: 'multiplier', label: 'Waiting between 2 bets until its under this multiplier' },
   multiplier: { value: '', type: 'multiplier', label: 'Multiplier' },
   betAmount: { value: '', type: 'balance', label: 'Bet amount' },
+  maxBet: { value: '', type: 'balance', label: 'Max Bet' },
   gameWait: { value: '', type: 'number', label: 'Waiting games without bet' },
-  maxBet: { value: '', type: 'balance', label: 'Max Bet' }
+  firstWait: { value: '', type: 'number', label: 'Waiting games between 2. and 3. multiplier' },
+  secondWait: { value: '', type: 'number', label: 'Waiting games between 3. and 4. multiplier' } 
 };
 
+const MAX_BET = config.maxBet.value / 100;
+const BIT_MULTIPLIER = 4;
+const MAX_LOSE_IN_A_ROW = 3;
+const GAMES_WAITING = config.gameWait.value;
+const WAIT_BETWEEN_SEC_THIRD_MULT = config.firstWait.value;
+const WAIT_BETWEEN_THIRD_FOURTH_MULT = config.secondWait.value;
 let bit = config.betAmount.value;
-let gamesWaiting = config.gameWait.value;
 let multiplier = config.multiplier.value;
+let bitRaise = false;
 let wait = false;
 let actGameWait = 0;
-const MAX_BET = config.maxBet.value / 100;
 let loseCounter = 0;
 let isBetting = false;
-let afresh = true;
+let actMaxGameWait = 0;
 
 engine.on('GAME_STARTING', () => {
   log('NEW GAME');
   if (wait) {    
     actGameWait++;
     log('Waited ' + actGameWait + ' game(s)');
-    if (actGameWait === gamesWaiting) {
+    if (actGameWait === actMaxGameWait) {
       wait = false;
       actGameWait = 0;
-      bit *= 3;
+      if (bitRaise) {
+        log('Max lose in a row has reached! The stake has been raised.');
+        bit *= BIT_MULTIPLIER;
+        bitRaise = false;
+      }
     }
 
     return;
   }
-
-  if (afresh && isLastTwoRedStreakUnderMultiplier(config.wait.value)) {
-    log('Last 2 game are under the given multiplier.');
-    log(`Betting ${ bit / 100 } bit with ${ multiplier } multplier.`);
-    engine.bet(bit, multiplier);
-    isBetting = true;
-    afresh = false;
-  }
-  else if (!afresh) {
-    engine.bet(bit, multiplier);
-    isBetting = true;
-    log(`Betting ${ bit / 100 } bit with ${ multiplier } multplier.`);
-  }
+  
+  log(`Betting ${ bit / 100 } bit with ${ multiplier } multplier.`);
+  engine.bet(bit, multiplier);
+  isBetting = true;
 });
 
 engine.on('GAME_ENDED', () => {
@@ -57,11 +58,21 @@ engine.on('GAME_ENDED', () => {
       
       loseCounter++;
       multiplier++;
-      if (loseCounter === 2) {
+      if (loseCounter === MAX_LOSE_IN_A_ROW) {
         wait = true;
+        actMaxGameWait = GAMES_WAITING;
         loseCounter = 0;
         multiplier = config.multiplier.value;
+        bitRaise = true;
       } 
+      else if (loseCounter === 1 && WAIT_BETWEEN_SEC_THIRD_MULT > 0) {
+        wait = true;
+        actMaxGameWait = WAIT_BETWEEN_SEC_THIRD_MULT;
+      }
+      else if (loseCounter === 2 && WAIT_BETWEEN_THIRD_FOURTH_MULT > 0) {
+        wait = true;
+        actMaxGameWait = WAIT_BETWEEN_THIRD_FOURTH_MULT;
+      }
     }
     else {
       log('WIN!');
@@ -76,12 +87,12 @@ function initialize() {
   multiplier = config.multiplier.value;
   loseCounter = 0;
   bit = config.betAmount.value;
-  afresh = true;
   isBetting = false;
+  log('The bet config has been restored.');
 }
 
-function isLastTwoRedStreakUnderMultiplier(multiplier) {
+/*function isLastTwoRedStreakUnderMultiplier(multiplier) {
   let gamesArray = engine.history.toArray();
   log('Last game bust: ' + gamesArray[0].bust + ', Penult bust: ' + gamesArray[1].bust);
   return gamesArray[0].bust < multiplier && gamesArray[1].bust < multiplier;
-}
+}*/
