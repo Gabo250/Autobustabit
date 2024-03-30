@@ -27,7 +27,7 @@ engine.on('GAME_STARTING', () => {
   if (wait) {    
     actGameWait++;
     log('Waited ' + actGameWait + ' game(s)');
-    if (actGameWait === actMaxGameWait) {
+    if (actGameWait >= actMaxGameWait) {
       wait = false;
       actGameWait = 0;
       if (bitRaise) {
