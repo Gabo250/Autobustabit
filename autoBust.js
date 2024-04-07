@@ -2,13 +2,14 @@ var config = {
   multiplier: { value: '', type: 'multiplier', label: 'Multiplier' },
   betAmount: { value: '', type: 'balance', label: 'Bet amount' },
   maxBet: { value: '', type: 'balance', label: 'Max Bet' },
+  bitMulti: { value: '', type: 'number', label: 'Bit raise multplier' },
   gameWait: { value: '', type: 'number', label: 'Waiting games without bet' },
   firstWait: { value: '', type: 'number', label: 'Waiting games between 2. and 3. multiplier' },
   secondWait: { value: '', type: 'number', label: 'Waiting games between 3. and 4. multiplier' } 
 };
 
 const MAX_BET = config.maxBet.value / 100;
-const BIT_MULTIPLIER = 4;
+const BIT_MULTIPLIER = config.bitMulti.value;
 const MAX_LOSE_IN_A_ROW = 3;
 const GAMES_WAITING = config.gameWait.value;
 const WAIT_BETWEEN_SEC_THIRD_MULT = config.firstWait.value;
