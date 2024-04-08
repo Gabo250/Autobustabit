@@ -22,7 +22,6 @@ let wait = false;
 let actGameWait = 0;
 let loseCounter = 0;
 let isBetting = false;
-let actMaxGameWait = 0;
 
 engine.on('GAME_STARTING', () => {
   log('NEW GAME');
@@ -35,7 +34,7 @@ engine.on('GAME_STARTING', () => {
   if (wait) {    
     actGameWait++;
     log('Waited ' + actGameWait + ' game(s)');
-    if (actGameWait >= actMaxGameWait) {
+    if (actGameWait >= GAMES_WAITING) {
       wait = false;
       actGameWait = 0;      
     }
