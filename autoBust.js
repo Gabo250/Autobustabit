@@ -3,17 +3,18 @@ var config = {
   betAmount: { value: '', type: 'balance', label: 'Bet amount' },
   maxBet: { value: '', type: 'balance', label: 'Max Bet' },
   bitMulti: { value: '', type: 'number', label: 'Bit raise multplier' },
-  gameWait: { value: '', type: 'number', label: 'Waiting games without bet' },
-  firstWait: { value: '', type: 'number', label: 'Waiting games between 2. and 3. multiplier' },
-  secondWait: { value: '', type: 'number', label: 'Waiting games between 3. and 4. multiplier' } 
+  gameWait: { value: '', type: 'number', label: 'Waiting games without bet' }
+  /*firstWait: { value: '', type: 'number', label: 'Waiting games between 2. and 3. multiplier' },
+  secondWait: { value: '', type: 'number', label: 'Waiting games between 3. and 4. multiplier' } */
 };
 
 const MAX_BET = config.maxBet.value / 100;
 const BIT_MULTIPLIER = config.bitMulti.value;
 const MAX_LOSE_IN_A_ROW = 3;
 const GAMES_WAITING = config.gameWait.value;
-const WAIT_BETWEEN_SEC_THIRD_MULT = config.firstWait.value;
-const WAIT_BETWEEN_THIRD_FOURTH_MULT = config.secondWait.value;
+const MAX_MULTIPLIER = 4;
+//const WAIT_BETWEEN_SEC_THIRD_MULT = config.firstWait.value;
+//const WAIT_BETWEEN_THIRD_FOURTH_MULT = config.secondWait.value;
 let bit = config.betAmount.value;
 let multiplier = config.multiplier.value;
 let bitRaise = false;
@@ -25,17 +26,18 @@ let actMaxGameWait = 0;
 
 engine.on('GAME_STARTING', () => {
   log('NEW GAME');
+  if (bitRaise) {     
+    log("Bit has raised.");
+    bit *= BIT_MULTIPLIER;
+    bitRaise = false;
+  }
+  
   if (wait) {    
     actGameWait++;
     log('Waited ' + actGameWait + ' game(s)');
     if (actGameWait >= actMaxGameWait) {
       wait = false;
-      actGameWait = 0;
-      if (bitRaise) {
-        log('Max lose in a row has reached! The stake has been raised.');
-        bit *= BIT_MULTIPLIER;
-        bitRaise = false;
-      }
+      actGameWait = 0;      
     }
 
     return;
@@ -56,24 +58,16 @@ engine.on('GAME_ENDED', () => {
         initialize();
         return;
       }
+
+      if (!wait) {
+        wait = true;
+      }      
+
+      if (multiplier < MAX_MULTIPLIER {
+        multiplier++;
+      }
       
-      loseCounter++;
-      multiplier++;
-      if (loseCounter === MAX_LOSE_IN_A_ROW) {
-        wait = true;
-        actMaxGameWait = GAMES_WAITING;
-        loseCounter = 0;
-        multiplier = config.multiplier.value;
-        bitRaise = true;
-      } 
-      else if (loseCounter === 1 && WAIT_BETWEEN_SEC_THIRD_MULT > 0) {
-        wait = true;
-        actMaxGameWait = WAIT_BETWEEN_SEC_THIRD_MULT;
-      }
-      else if (loseCounter === 2 && WAIT_BETWEEN_THIRD_FOURTH_MULT > 0) {
-        wait = true;
-        actMaxGameWait = WAIT_BETWEEN_THIRD_FOURTH_MULT;
-      }
+      bitRaise = true;
     }
     else {
       log('WIN!');
